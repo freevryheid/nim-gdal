@@ -32,7 +32,6 @@ proc main() =
       if not isNil(hGeometry):
         if flatten(getGeometryType(hGeometry)) == Point:
           echo getX(hGeometry, 0), getY(hGeometry, 0)
-        elif flatten(getGeometryType(hGeometry)) == Point:
         else:
           echo "no point geometry"
     Destroy(hFeature)
