@@ -116,7 +116,7 @@ proc Open*(pszFilename: cstring, nOpenFlags: int32, papszAllowedDrivers: cstring
 proc getLayerByName*(hDS: Dataset, pszName: cstring): Layer {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerByName".}
   ## Fetch a layer by name.
 
-proc getLayerCount*(hDS: Dataset): int32 {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerCount".}
+proc getLayerCount*(hDS: Dataset): int {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerCount".}
   ## Get the number of layers in this dataset.
 
 proc getLayer*(hDS: Dataset, iLayer: int32): Layer {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayer".}
@@ -131,16 +131,19 @@ proc getNextFeature*(hLayer: Layer): Feature {.cdecl, dynlib: libgdal, importc: 
 proc getLayerDefn*(hLayer: Layer): FeatureDefn {.cdecl, dynlib: libgdal, importc: "OGR_L_GetLayerDefn".}
   ## Fetch the schema information for this layer.
   
-proc getFieldCount*(hDefn: FeatureDefn): int32 {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldCount".}
+proc getFieldCount*(hDefn: FeatureDefn): int {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldCount".}
   ## Fetch number of fields on this feature.
 
 proc getFieldDefn*(hDefn: FeatureDefn, iField: int): FieldDefn {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldDefn".}
   ## Fetch field definition of the passed feature definition.
 
+proc getFieldIndex*(hDefn: FeatureDefn, pszFieldName: cstring): int {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldIndex".}
+  ## Find field by name.
+
 proc getType*(hDefn: FieldDefn): FieldType {.cdecl, dynlib: libgdal, importc: "OGR_Fld_GetType".}
   ## Fetch type of this field.
 
-proc getFieldAsInteger*(hFeat: Feature, iField: int32): int32 {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsInteger".}
+proc getFieldAsInteger*(hFeat: Feature, iField: int32): int {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsInteger".}
   ## Fetch field value as int32.
 
 proc getFieldAsInteger64*(hFeat: Feature, iField: int32): int {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsInteger64".}
@@ -170,7 +173,7 @@ proc getY*(hGeom: Geometry, i: int32): float32 {.cdecl, dynlib: libgdal, importc
 proc getZ*(hGeom: Geometry, i: int32): float32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetZ".}
   ## Fetch the z coordinate of a point from a geometry.
 
-proc getGeomFieldCount*(hFeat: Feature): int32 {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldCount".}
+proc getGeomFieldCount*(hFeat: Feature): int {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldCount".}
   ## Fetch number of geometry fields on this feature.
 
 proc getGeomFieldRef*(hFeat: Feature, iField: int32): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldRef".}
@@ -194,13 +197,13 @@ proc getSpatialReference*(hGeom: Geometry): SpatialReference {.cdecl, dynlib: li
 proc Intersection*(hThis, hOther: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersection".}
   ## Compute intersection.
 
-proc Intersects*(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
+proc Intersects*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
   ## Do the features intersect?
 
 proc Length*(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
   ## Compute length of a geometry.
 
-proc Overlaps*(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
+proc Overlaps*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
   ## Test for overlap.
 
 proc pointOnSurface*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_PointOnSurface".}
