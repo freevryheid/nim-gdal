@@ -200,5 +200,21 @@ proc Intersects(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, import
 proc Length(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
   ## Compute length of a geometry.
 
+proc Overlaps(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
+  ## Test for overlap.
 
+proc pointOnSurface(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_PointOnSurface".}
+  ## Returns a point guaranteed to lie on the geometry.
+
+proc Touches(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
+  ## Test for touching
+
+proc Value(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Value".}
+  ## Fetch point at given distance along curve.
+
+proc getName(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_GetName".}
+  ## Return the layer name
+
+proc getSpatialRef(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_L_GetSpatialRef".}
+  ## Fetch the spatial reference system for this layer.
 
