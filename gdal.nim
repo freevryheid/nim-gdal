@@ -188,33 +188,33 @@ proc Flatten*(eType: GeometryType): GeometryType {.cdecl, dynlib: libgdal, impor
 proc getProjectionRef*(hDS: Dataset): cstring {.cdecl, dynlib: libgdal, importc: "GDALGetProjectionRef".}
   ## Fetch the projection definition string for this dataset.
 
-proc getSpatialReference(hGeom: Geometry): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_G_GetSpatialReference".}
+proc getSpatialReference*(hGeom: Geometry): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_G_GetSpatialReference".}
   ## Returns spatial reference system for geometry.
 
-proc Intersection(hThis, hOther: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersection".}
+proc Intersection*(hThis, hOther: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersection".}
   ## Compute intersection.
 
-proc Intersects(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
+proc Intersects*(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
   ## Do the features intersect?
 
-proc Length(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
+proc Length*(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
   ## Compute length of a geometry.
 
-proc Overlaps(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
+proc Overlaps*(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
   ## Test for overlap.
 
-proc pointOnSurface(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_PointOnSurface".}
+proc pointOnSurface*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_PointOnSurface".}
   ## Returns a point guaranteed to lie on the geometry.
 
-proc Touches(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
+proc Touches*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
   ## Test for touching
 
-proc Value(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Value".}
+proc Value*(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Value".}
   ## Fetch point at given distance along curve.
 
-proc getName(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_GetName".}
+proc getName*(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_GetName".}
   ## Return the layer name
 
-proc getSpatialRef(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_L_GetSpatialRef".}
+proc getSpatialRef*(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_L_GetSpatialRef".}
   ## Fetch the spatial reference system for this layer.
 
