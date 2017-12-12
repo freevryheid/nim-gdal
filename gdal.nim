@@ -11,9 +11,8 @@ type
   Feature* = pointer
   FeatureDefn* = pointer
   FieldDefn* = pointer
-  #FieldType* = pointer
   Geometry* = pointer
-  #GeometryType = pointer
+  SpatialReference* = pointer
   FieldType* = enum
     Integer                ## Simple 32bit integer.
     IntegerList            ## List of 32bit integers.
@@ -183,5 +182,23 @@ proc Destroy*(hFeat: Feature) {.cdecl, dynlib: libgdal, importc: "OGR_F_Destroy"
 proc Close*(hDS: Dataset) {.cdecl, dynlib: libgdal, importc: "GDALClose".}
   ## Close GDAL dataset
 
-proc flatten*(eType: GeometryType): GeometryType {.cdecl, dynlib: libgdal, importc: "OGR_GT_Flatten".}
+proc Flatten*(eType: GeometryType): GeometryType {.cdecl, dynlib: libgdal, importc: "OGR_GT_Flatten".}
   ## Returns the 2D geometry type corresponding to the passed geometry type.
+
+proc getProjectionRef*(hDS: Dataset): cstring {.cdecl, dynlib: libgdal, importc: "GDALGetProjectionRef".}
+  ## Fetch the projection definition string for this dataset.
+
+proc getSpatialReference(hGeom: Geometry): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_G_GetSpatialReference".}
+  ## Returns spatial reference system for geometry.
+
+proc Intersection(hThis, hOther: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersection".}
+  ## Compute intersection.
+
+proc Intersects(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
+  ## Do the features intersect?
+
+proc Length(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
+  ## Compute length of a geometry.
+
+
+
