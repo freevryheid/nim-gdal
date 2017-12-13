@@ -137,13 +137,13 @@ proc getFieldCount*(hDefn: FeatureDefn): int {.cdecl, dynlib: libgdal, importc: 
 proc getFieldDefn*(hDefn: FeatureDefn, iField: int): FieldDefn {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldDefn".}
   ## Fetch field definition of the passed feature definition.
 
-proc getFieldIndex*(hDefn: FeatureDefn, pszFieldName: cstring): int {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldIndex".}
+proc getFieldIndex*(hDefn: FeatureDefn, pszFieldName: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldIndex".}
   ## Find field by name.
 
 proc getType*(hDefn: FieldDefn): FieldType {.cdecl, dynlib: libgdal, importc: "OGR_Fld_GetType".}
   ## Fetch type of this field.
 
-proc getFieldAsInteger*(hFeat: Feature, iField: int32): int {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsInteger".}
+proc getFieldAsInteger*(hFeat: Feature, iField: int32): int32 {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsInteger".}
   ## Fetch field value as int32.
 
 proc getFieldAsInteger64*(hFeat: Feature, iField: int32): int {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsInteger64".}
@@ -221,3 +221,29 @@ proc getName*(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_
 proc getSpatialRef*(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_L_GetSpatialRef".}
   ## Fetch the spatial reference system for this layer.
 
+proc exportToProj4*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, dynlib: libgdal, importc: "OSRExportToProj4".}
+  ## Export coordinate system in PROJ.4 format.
+
+proc exportToWkt*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, dynlib: libgdal, importc: "OSRExportToWkt".}
+  ## Convert this SRS into WKT format.
+
+proc Distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance".}
+   ## Compute distance between two geometries.
+
+proc Distance3D*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance3D".}
+   ## Returns 3D distance between two geometries.
+
+
+# helper procs
+
+# iterator layer(): int =
+#   while true:
+#     hFeature = getNextFeature(hLayer)
+#     if isNil(hFeature):
+#       break
+#     var
+#       iField: int
+#       hGeometry: Geometry
+#       hFieldDefn = getFieldDefn(hFDefn, iField)
+#       rteIndex = getFieldIndex(hFDefn, "RTE_NM")
+#       ret = getFieldAsString(hFeature, rteIndex)
