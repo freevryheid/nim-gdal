@@ -104,13 +104,13 @@ type
 const
   OF_VECTOR* = 0x04
 
-proc AllRegister*() {.cdecl, dynlib: libgdal, importc: "GDALAllRegister".}
+proc registerAll*() {.cdecl, dynlib: libgdal, importc: "GDALAllRegister".}
   ## Register all known configured GDAL drivers.
   ## This function will drive any of the following that are configured into GDA:
   ## raster list http://gdal.org/formats_list.html, vector list http://gdal.org/ogr_formats.html
   ## This function should generally be called once at the beginning of the application.
 
-proc Open*(pszFilename: cstring, nOpenFlags: int32, papszAllowedDrivers: cstring, papszOpenOptions: cstring, papszSiblingFiles: cstring): Dataset {.cdecl, dynlib: libgdal, importc: "GDALOpenEx".}
+proc open*(pszFilename: cstring, nOpenFlags: int32, papszAllowedDrivers: cstring, papszOpenOptions: cstring, papszSiblingFiles: cstring): Dataset {.cdecl, dynlib: libgdal, importc: "GDALOpenEx".}
   ## Open a raster or vector file as a Dataset.
 
 proc getLayerByName*(hDS: Dataset, pszName: cstring): Layer {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerByName".}
@@ -179,13 +179,13 @@ proc getGeomFieldCount*(hFeat: Feature): int {.cdecl, dynlib: libgdal, importc: 
 proc getGeomFieldRef*(hFeat: Feature, iField: int32): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldRef".}
   ## Fetch an handle to feature geometry.
 
-proc Destroy*(hFeat: Feature) {.cdecl, dynlib: libgdal, importc: "OGR_F_Destroy".}
+proc destroy*(hFeat: Feature) {.cdecl, dynlib: libgdal, importc: "OGR_F_Destroy".}
   ## Destroy feature
 
-proc Close*(hDS: Dataset) {.cdecl, dynlib: libgdal, importc: "GDALClose".}
+proc close*(hDS: Dataset) {.cdecl, dynlib: libgdal, importc: "GDALClose".}
   ## Close GDAL dataset
 
-proc Flatten*(eType: GeometryType): GeometryType {.cdecl, dynlib: libgdal, importc: "OGR_GT_Flatten".}
+proc flatten*(eType: GeometryType): GeometryType {.cdecl, dynlib: libgdal, importc: "OGR_GT_Flatten".}
   ## Returns the 2D geometry type corresponding to the passed geometry type.
 
 proc getProjectionRef*(hDS: Dataset): cstring {.cdecl, dynlib: libgdal, importc: "GDALGetProjectionRef".}
@@ -194,25 +194,25 @@ proc getProjectionRef*(hDS: Dataset): cstring {.cdecl, dynlib: libgdal, importc:
 proc getSpatialReference*(hGeom: Geometry): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_G_GetSpatialReference".}
   ## Returns spatial reference system for geometry.
 
-proc Intersection*(hThis, hOther: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersection".}
+proc intersection*(hThis, hOther: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersection".}
   ## Compute intersection.
 
-proc Intersects*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
+proc intersects*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Intersects".}
   ## Do the features intersect?
 
-proc Length*(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
+proc length*(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
   ## Compute length of a geometry.
 
-proc Overlaps*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
+proc overlaps*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
   ## Test for overlap.
 
 proc pointOnSurface*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_PointOnSurface".}
   ## Returns a point guaranteed to lie on the geometry.
 
-proc Touches*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
+proc touches*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
   ## Test for touching
 
-proc Value*(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Value".}
+proc value*(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Value".}
   ## Fetch point at given distance along curve.
 
 proc getName*(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_GetName".}
@@ -227,10 +227,10 @@ proc exportToProj4*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, d
 proc exportToWkt*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, dynlib: libgdal, importc: "OSRExportToWkt".}
   ## Convert this SRS into WKT format.
 
-proc Distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance".}
+proc distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance".}
    ## Compute distance between two geometries.
 
-proc Distance3D*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance3D".}
+proc distance3D*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance3D".}
    ## Returns 3D distance between two geometries.
 
 
