@@ -15,6 +15,7 @@ type
   FieldDefn* = pointer
   Geometry* = pointer
   SpatialReference* = pointer
+  CoordinateTransformation* = pointer
   FieldType* = enum
     Integer                ## Simple 32bit integer.
     IntegerList            ## List of 32bit integers.
@@ -253,14 +254,20 @@ proc getPoint*(hGeom: Geometry, i: int32, pdfX, pdfY, pdfZ: var float) {.cdecl, 
 proc forceToLineString*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_ForceToLineString".}
   ## Convert to line string.
 
-proc setAttributeFilter(hLayer: Layer, query: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OGR_L_SetAttributeFilter".}
+proc setAttributeFilter*(hLayer: Layer, query: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OGR_L_SetAttributeFilter".}
   ## Set a new attribute query.
 
-proc getFeature(hLayer: Layer, fId: int): Feature {.cdecl, dynlib: libgdal, importc: "OGR_L_GetFeature".}
+proc getFeature*(hLayer: Layer, fId: int): Feature {.cdecl, dynlib: libgdal, importc: "OGR_L_GetFeature".}
   ## Fetch a feature by its identifier.
 
-proc getFeatureCount(hLayer: Layer, fId: int): int {.cdecl, dynlib: libgdal, importc: "OGR_L_GetFeatureCount".}
+proc getFeatureCount*(hLayer: Layer, fId: int): int {.cdecl, dynlib: libgdal, importc: "OGR_L_GetFeatureCount".}
   ## Fetch the feature count in this layer.
+
+proc importFromEPSG*(hSRS: SpatialReference, nCode: int32): int32 {.cdecl, dynlib: libgdal, importc: "OSRImportFromEPSG".}
+  ## Initialize SRS based on EPSG GCS or PCS code.
+
+proc newCoordinateTransformation*(sourceSRS, targetSRS: SpatialReference): CoordinateTransformation {.cdecl, dynlib: libgdal, importc: "OCTNewCoordinateTransformation".}
+  ## Create transformation object
 
 # helper procs
 
