@@ -228,14 +228,23 @@ proc exportToWkt*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, dyn
   ## Convert this SRS into WKT format.
 
 proc distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance".}
-   ## Compute distance between two geometries.
+  ## Compute distance between two geometries.
 
 proc distance3D*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance3D".}
-   ## Returns 3D distance between two geometries.
+  ## Returns 3D distance between two geometries.
+
+proc createGeometry*(gType: GeometryType): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_CreateGeometry".}
+  ## Create an empty geometry of indicated type.
+
+proc setPoint2D*(hGeom: Geometry, i: int32, dfX, dfY: float) {.cdecl, dynlib: libgdal, importc: "OGR_G_SetPoint_2D".}
+  ## Set the location of a vertex in a point or linestring geometry. i is the index of the vertex to assign (zero based) or zero for a point.
+
+proc setPoint*(hGeom: Geometry, i: int32, dfX, dfY, dfZ: float) {.cdecl, dynlib: libgdal, importc: "OGR_G_SetPoint".}
+  ## Set the location of a vertex in a point or linestring geometry.
 
 # helper procs
 
-iterator features(layer: Layer): Feature =
+iterator features*(layer: Layer): Feature =
   var res: Feature
   while true:
     res = layer.getNextFeature()
@@ -243,11 +252,11 @@ iterator features(layer: Layer): Feature =
       break
     yield res
 
-proc getFieldType(fdefn: FeatureDefn, i: int32): FieldType =
+proc getFieldType*(fdefn: FeatureDefn, i: int32): FieldType =
   var fd = fdefn.getFieldDefn(i)
   return fd.getType()
 
-proc getStringField(f: Feature, fdefn: FeatureDefn, field: string): cstring =
+proc getStringField*(f: Feature, fdefn: FeatureDefn, field: string): cstring =
   var index = fdefn.getFieldIndex(cstring(field))
   return f.getFieldAsString(index)
 
