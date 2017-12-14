@@ -244,11 +244,23 @@ proc setPoint2D*(hGeom: Geometry, i: int32, dfX, dfY: float) {.cdecl, dynlib: li
 proc setPoint*(hGeom: Geometry, i: int, dfX, dfY, dfZ: float) {.cdecl, dynlib: libgdal, importc: "OGR_G_SetPoint".}
   ## Set the location of a vertex in a point or linestring geometry.
 
-proc getPointCount(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetPointCount".}
+proc getPointCount*(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetPointCount".}
   ## Fetch number of points from a geometry.
 
-proc getPoint(hGeom: Geometry, i: int32, pdfX, pdfY, pdfZ: var float) {.cdecl, dynlib: libgdal, importc: "OGR_G_GetPoint".}
+proc getPoint*(hGeom: Geometry, i: int32, pdfX, pdfY, pdfZ: var float) {.cdecl, dynlib: libgdal, importc: "OGR_G_GetPoint".}
   ## Fetch a point in line string or a point geometry.
+
+proc forceToLineString*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_ForceToLineString".}
+  ## Convert to line string.
+
+proc setAttributeFilter(hLayer: Layer, query: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OGR_L_SetAttributeFilter".}
+  ## Set a new attribute query.
+
+proc getFeature(hLayer: Layer, fId: int): Feature {.cdecl, dynlib: libgdal, importc: "OGR_L_GetFeature".}
+  ## Fetch a feature by its identifier.
+
+proc getFeatureCount(hLayer: Layer, fId: int): int {.cdecl, dynlib: libgdal, importc: "OGR_L_GetFeatureCount".}
+  ## Fetch the feature count in this layer.
 
 # helper procs
 
@@ -269,16 +281,20 @@ proc getStringField*(f: Feature, fdefn: FeatureDefn, field: string): cstring =
   return f.getFieldAsString(index)
 
 proc closestPointonLine*(ln, pt0: Geometry): Geometry =
+  # TODO: FixMe
   var
     x, y, z: float
     D = 99999.9
     pt: Geometry
     d: float
-  for i in 0 .. < ln.getPointCount():
+    n = ln.forceToLineString.getPointCount()
+  echo "n: ", n  
+  for i in 0 .. <n:
     ln.getPoint(i, x, y, z) 
     pt = createGeometry(Point)
     pt.setPoint(0, x, y, z)
     d = distance(pt0, pt)
+    echo d
     if d > D:
       D = d
       result = pt
