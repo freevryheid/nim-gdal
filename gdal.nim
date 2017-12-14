@@ -5,6 +5,8 @@ elif defined(macosx):
 else:
   const libgdal = "libgdal.so"
 
+import math
+
 type
   Dataset* = pointer
   Layer* = pointer
@@ -116,7 +118,7 @@ proc open*(pszFilename: cstring, nOpenFlags: int32, papszAllowedDrivers: cstring
 proc getLayerByName*(hDS: Dataset, pszName: cstring): Layer {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerByName".}
   ## Fetch a layer by name.
 
-proc getLayerCount*(hDS: Dataset): int {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerCount".}
+proc getLayerCount*(hDS: Dataset): int32 {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayerCount".}
   ## Get the number of layers in this dataset.
 
 proc getLayer*(hDS: Dataset, iLayer: int32): Layer {.cdecl, dynlib: libgdal, importc: "GDALDatasetGetLayer".}
@@ -131,10 +133,10 @@ proc getNextFeature*(hLayer: Layer): Feature {.cdecl, dynlib: libgdal, importc: 
 proc getLayerDefn*(hLayer: Layer): FeatureDefn {.cdecl, dynlib: libgdal, importc: "OGR_L_GetLayerDefn".}
   ## Fetch the schema information for this layer.
   
-proc getFieldCount*(hDefn: FeatureDefn): int {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldCount".}
+proc getFieldCount*(hDefn: FeatureDefn): int32 {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldCount".}
   ## Fetch number of fields on this feature.
 
-proc getFieldDefn*(hDefn: FeatureDefn, iField: int): FieldDefn {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldDefn".}
+proc getFieldDefn*(hDefn: FeatureDefn, iField: int32): FieldDefn {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldDefn".}
   ## Fetch field definition of the passed feature definition.
 
 proc getFieldIndex*(hDefn: FeatureDefn, pszFieldName: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OGR_FD_GetFieldIndex".}
@@ -152,7 +154,7 @@ proc getFieldAsInteger64*(hFeat: Feature, iField: int32): int {.cdecl, dynlib: l
 proc getFieldAsString*(hFeat: Feature, iField: int32): cstring {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsString".}
   ## Fetch field value as cstring.
 
-proc getFieldAsDouble*(hFeat: Feature, iField: int32): float32 {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsDouble".}
+proc getFieldAsDouble*(hFeat: Feature, iField: int32): float {.cdecl, dynlib: libgdal, importc: "OGR_F_GetFieldAsDouble".}
   ## Fetch field value as float32.
 
 proc getGeometryRef*(hFeat: Feature): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeometryRef".}
@@ -164,16 +166,16 @@ proc getGeometryRef*(hGeom: Geometry, iSubGeom: int32): Geometry {.cdecl, dynlib
 proc getGeometryType*(hGeom: Geometry): GeometryType {.cdecl, dynlib: libgdal, importc: "OGR_G_GetGeometryType".}
   ## Fetch geometry type.
 
-proc getX*(hGeom: Geometry, i: int32): float32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetX".}
+proc getX*(hGeom: Geometry, i: int32): float {.cdecl, dynlib: libgdal, importc: "OGR_G_GetX".}
   ## Fetch the x coordinate of a point from a geometry.
 
-proc getY*(hGeom: Geometry, i: int32): float32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetY".}
+proc getY*(hGeom: Geometry, i: int32): float {.cdecl, dynlib: libgdal, importc: "OGR_G_GetY".}
   ## Fetch the y coordinate of a point from a geometry.
 
-proc getZ*(hGeom: Geometry, i: int32): float32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetZ".}
+proc getZ*(hGeom: Geometry, i: int32): float {.cdecl, dynlib: libgdal, importc: "OGR_G_GetZ".}
   ## Fetch the z coordinate of a point from a geometry.
 
-proc getGeomFieldCount*(hFeat: Feature): int {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldCount".}
+proc getGeomFieldCount*(hFeat: Feature): int32 {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldCount".}
   ## Fetch number of geometry fields on this feature.
 
 proc getGeomFieldRef*(hFeat: Feature, iField: int32): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_F_GetGeomFieldRef".}
@@ -209,7 +211,7 @@ proc overlaps*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: 
 proc pointOnSurface*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_PointOnSurface".}
   ## Returns a point guaranteed to lie on the geometry.
 
-proc touches*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
+proc touches*(hThis, hOther: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Touches".}
   ## Test for touching
 
 proc value*(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Value".}
@@ -221,10 +223,10 @@ proc getName*(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_
 proc getSpatialRef*(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_L_GetSpatialRef".}
   ## Fetch the spatial reference system for this layer.
 
-proc exportToProj4*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, dynlib: libgdal, importc: "OSRExportToProj4".}
+proc exportToProj4*(hSRS: SpatialReference, ppszReturn: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OSRExportToProj4".}
   ## Export coordinate system in PROJ.4 format.
 
-proc exportToWkt*(hSRS: SpatialReference, ppszReturn: cstring): int {.cdecl, dynlib: libgdal, importc: "OSRExportToWkt".}
+proc exportToWkt*(hSRS: SpatialReference, ppszReturn: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OSRExportToWkt".}
   ## Convert this SRS into WKT format.
 
 proc distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance".}
@@ -239,8 +241,14 @@ proc createGeometry*(gType: GeometryType): Geometry {.cdecl, dynlib: libgdal, im
 proc setPoint2D*(hGeom: Geometry, i: int32, dfX, dfY: float) {.cdecl, dynlib: libgdal, importc: "OGR_G_SetPoint_2D".}
   ## Set the location of a vertex in a point or linestring geometry. i is the index of the vertex to assign (zero based) or zero for a point.
 
-proc setPoint*(hGeom: Geometry, i: int32, dfX, dfY, dfZ: float) {.cdecl, dynlib: libgdal, importc: "OGR_G_SetPoint".}
+proc setPoint*(hGeom: Geometry, i: int, dfX, dfY, dfZ: float) {.cdecl, dynlib: libgdal, importc: "OGR_G_SetPoint".}
   ## Set the location of a vertex in a point or linestring geometry.
+
+proc getPointCount(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetPointCount".}
+  ## Fetch number of points from a geometry.
+
+proc getPoint(hGeom: Geometry, i: int32, pdfX, pdfY, pdfZ: var float) {.cdecl, dynlib: libgdal, importc: "OGR_G_GetPoint".}
+  ## Fetch a point in line string or a point geometry.
 
 # helper procs
 
@@ -260,7 +268,22 @@ proc getStringField*(f: Feature, fdefn: FeatureDefn, field: string): cstring =
   var index = fdefn.getFieldIndex(cstring(field))
   return f.getFieldAsString(index)
 
-
+proc closestPointonLine*(ln, pt0: Geometry): Geometry =
+  var
+    x, y, z: float
+    D = 99999.9
+    pt: Geometry
+    d: float
+  for i in 0 .. < ln.getPointCount():
+    ln.getPoint(i, x, y, z) 
+    pt = createGeometry(Point)
+    pt.setPoint(0, x, y, z)
+    d = distance(pt0, pt)
+    if d > D:
+      D = d
+      result = pt
+  echo D
+      
 # proc getField(f: Feature, fdefn: FeatureDefn, field: string): auto =
 #   var index = fdefn.getFieldIndex(cstring(field))
 #   case fdefn.getFieldType(index):
