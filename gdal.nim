@@ -233,17 +233,31 @@ proc distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, import
 proc distance3D*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance3D".}
    ## Returns 3D distance between two geometries.
 
-
 # helper procs
 
-# iterator layer(): int =
-#   while true:
-#     hFeature = getNextFeature(hLayer)
-#     if isNil(hFeature):
-#       break
-#     var
-#       iField: int
-#       hGeometry: Geometry
-#       hFieldDefn = getFieldDefn(hFDefn, iField)
-#       rteIndex = getFieldIndex(hFDefn, "RTE_NM")
-#       ret = getFieldAsString(hFeature, rteIndex)
+iterator features(layer: Layer): Feature =
+  var res: Feature
+  while true:
+    res = layer.getNextFeature()
+    if isNil(res):
+      break
+    yield res
+
+proc getFieldType(fdefn: FeatureDefn, i: int32): FieldType =
+  var fd = fdefn.getFieldDefn(i)
+  return fd.getType()
+
+proc getStringField(f: Feature, fdefn: FeatureDefn, field: string): cstring =
+  var index = fdefn.getFieldIndex(cstring(field))
+  return f.getFieldAsString(index)
+
+
+# proc getField(f: Feature, fdefn: FeatureDefn, field: string): auto =
+#   var index = fdefn.getFieldIndex(cstring(field))
+#   case fdefn.getFieldType(index):
+#     of Integer: return f.getFieldAsInteger(index)
+#     of Integer64: return f.getFieldAsInteger64(index)
+#     of Real: return f.getFieldAsDouble(index)
+#     of String: return f.getFieldAsString(index)
+#     else: return f.getFieldAsString(index)
+
