@@ -269,6 +269,12 @@ proc importFromEPSG*(hSRS: SpatialReference, nCode: int32): int32 {.cdecl, dynli
 proc newCoordinateTransformation*(sourceSRS, targetSRS: SpatialReference): CoordinateTransformation {.cdecl, dynlib: libgdal, importc: "OCTNewCoordinateTransformation".}
   ## Create transformation object
 
+proc transform*(hGeom: Geometry, hTransform: CoordinateTransformation): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_Transform".}
+  ## Apply arbitrary coordinate transformation to geometry.
+
+proc transformTo*(hGeom: Geometry, hSRS: SpatialReference): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_TransformTo".}
+  ## Transform geometry to new spatial reference system.
+
 # helper procs
 
 iterator features*(layer: Layer): Feature =
