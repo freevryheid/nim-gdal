@@ -106,7 +106,173 @@ type
 
 const
   OF_VECTOR* = 0x04
-
+  WKT_WGS84 = "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]"  ## WGS 84 geodetic (long/lat) WKT / EPSG:4326 with long,lat ordering
+  PT_ALBERS_CONIC_EQUAL_AREA = "Albers_Conic_Equal_Area"  ## Albers_Conic_Equal_Area projection
+  PT_AZIMUTHAL_EQUIDISTANT = "Azimuthal_Equidistant"  ## Azimuthal_Equidistant projection
+  PT_CASSINI_SOLDNER = "Cassini_Soldner"  ## Cassini_Soldner projection
+  PT_CYLINDRICAL_EQUAL_AREA = "Cylindrical_Equal_Area"  ## Cylindrical_Equal_Area projection 
+  PT_BONNE = "Bonne"  ## Cylindrical_Equal_Area projection 
+  PT_ECKERT_I = "Eckert_I"  ## Eckert_I projection 
+  PT_ECKERT_II = "Eckert_II"  ## Eckert_II projection 
+  PT_ECKERT_III = "Eckert_III"  ## Eckert_III projection 
+  PT_ECKERT_IV = "Eckert_IV"  ## Eckert_IV projection 
+  PT_ECKERT_V = "Eckert_V"  ## Eckert_V projection 
+  PT_ECKERT_VI = "Eckert_VI"  ## Eckert_VI projection 
+  PT_EQUIDISTANT_CONIC = "Equidistant_Conic"  ## Equidistant_Conic projection 
+  PT_EQUIRECTANGULAR = "Equirectangular"  ## Equirectangular projection 
+  PT_GALL_STEREOGRAPHIC = "Gall_Stereographic"  ## Gall_Stereographic projection 
+  PT_GAUSSSCHREIBERTMERCATOR = "Gauss_Schreiber_Transverse_Mercator"  ## Gauss_Schreiber_Transverse_Mercator projection 
+  PT_GEOSTATIONARY_SATELLITE = "Geostationary_Satellite"  ## Geostationary_Satellite projection 
+  PT_GOODE_HOMOLOSINE = "Goode_Homolosine"  ## Goode_Homolosine projection 
+  PT_IGH = "Interrupted_Goode_Homolosine"  ## Interrupted_Goode_Homolosine projection 
+  PT_GNOMONIC = "Gnomonic"  ## Gnomonic projection 
+  PT_HOTINE_OBLIQUE_MERCATOR_AZIMUTH_CENTER = "Hotine_Oblique_Mercator_Azimuth_Center"  ## Hotine_Oblique_Mercator_Azimuth_Center projection 
+  PT_HOTINE_OBLIQUE_MERCATOR = "Hotine_Oblique_Mercator"  ## Hotine_Oblique_Mercator projection 
+  PT_HOTINE_OBLIQUE_MERCATOR_TWO_POINT_NATURAL_ORIGIN = "Hotine_Oblique_Mercator_Two_Point_Natural_Origin"  ## Hotine_Oblique_Mercator_Two_Point_Natural_Origin projection 
+  PT_LABORDE_OBLIQUE_MERCATOR = "Laborde_Oblique_Mercator"  ## Laborde_Oblique_Mercator projection 
+  PT_LAMBERT_CONFORMAL_CONIC_1SP = "Lambert_Conformal_Conic_1SP"  ## Lambert_Conformal_Conic_1SP projection 
+  PT_LAMBERT_CONFORMAL_CONIC_2SP = "Lambert_Conformal_Conic_2SP"  ## Lambert_Conformal_Conic_2SP projection 
+  PT_LAMBERT_CONFORMAL_CONIC_2SP_BELGIUM = "Lambert_Conformal_Conic_2SP_Belgium"  ## Lambert_Conformal_Conic_2SP_Belgium projection 
+  PT_LAMBERT_AZIMUTHAL_EQUAL_AREA = "Lambert_Azimuthal_Equal_Area"  ## Lambert_Azimuthal_Equal_Area projection 
+  PT_MERCATOR_1SP = "Mercator_1SP"  ## Mercator_1SP projection 
+  PT_MERCATOR_2SP = "Mercator_2SP"  ## Mercator_2SP projection 
+  PT_MERCATOR_AUXILIARY_SPHERE = "Mercator_Auxiliary_Sphere"  ## Mercator_Auxiliary_Sphere is used used by ESRI to mean EPSG:3875 
+  PT_MILLER_CYLINDRICAL = "Miller_Cylindrical"  ## Miller_Cylindrical projection 
+  PT_MOLLWEIDE = "Mollweide"  ## Mollweide projection 
+  PT_NEW_ZEALAND_MAP_GRID = "New_Zealand_Map_Grid"  ## New_Zealand_Map_Grid projection 
+  PT_OBLIQUE_STEREOGRAPHIC = "Oblique_Stereographic"  ## Oblique_Stereographic projection 
+  PT_ORTHOGRAPHIC = "Orthographic"  ## Orthographic projection 
+  PT_POLAR_STEREOGRAPHIC = "Polar_Stereographic"  ## Polar_Stereographic projection 
+  PT_POLYCONIC = "Polyconic"  ## Polyconic projection 
+  PT_ROBINSON = "Robinson"  ## Robinson projection 
+  PT_SINUSOIDAL = "Sinusoidal"  ## Sinusoidal projection 
+  PT_STEREOGRAPHIC = "Stereographic"  ## Stereographic projection 
+  PT_SWISS_OBLIQUE_CYLINDRICAL = "Swiss_Oblique_Cylindrical"  ## Swiss_Oblique_Cylindrical projection 
+  PT_TRANSVERSE_MERCATOR = "Transverse_Mercator"  ## Transverse_Mercator projection 
+  PT_TRANSVERSE_MERCATOR_SOUTH_ORIENTED = "Transverse_Mercator_South_Orientated"  ## Transverse_Mercator_South_Orientated projection 
+  PT_TRANSVERSE_MERCATOR_MI_21 = "Transverse_Mercator_MapInfo_21"  ## Transverse_Mercator_MapInfo_21 projection 
+  PT_TRANSVERSE_MERCATOR_MI_22 = "Transverse_Mercator_MapInfo_22"  ## Transverse_Mercator_MapInfo_22 projection 
+  PT_TRANSVERSE_MERCATOR_MI_23 = "Transverse_Mercator_MapInfo_23"  ## Transverse_Mercator_MapInfo_23 projection 
+  PT_TRANSVERSE_MERCATOR_MI_24 = "Transverse_Mercator_MapInfo_24"  ## Transverse_Mercator_MapInfo_24 projection 
+  PT_TRANSVERSE_MERCATOR_MI_25 = "Transverse_Mercator_MapInfo_25"  ## Transverse_Mercator_MapInfo_25 projection 
+  PT_TUNISIA_MINING_GRID = "Tunisia_Mining_Grid"  ## Tunisia_Mining_Grid projection 
+  PT_TWO_POINT_EQUIDISTANT = "Two_Point_Equidistant"  ## Two_Point_Equidistant projection 
+  PT_VANDERGRINTEN = "VanDerGrinten"  ## VanDerGrinten projection 
+  PT_KROVAK = "Krovak"  ## Krovak projection 
+  PT_IMW_POLYCONIC = "International_Map_of_the_World_Polyconic"  ## International_Map_of_the_World_Polyconic projection 
+  PT_WAGNER_I = "Wagner_I"  ## Wagner_I projection 
+  PT_WAGNER_II = "Wagner_II"  ## Wagner_II projection 
+  PT_WAGNER_III = "Wagner_III"  ## Wagner_III projection 
+  PT_WAGNER_IV = "Wagner_IV"  ## Wagner_IV projection 
+  PT_WAGNER_V = "Wagner_V"  ## Wagner_V projection 
+  PT_WAGNER_VI = "Wagner_VI"  ## Wagner_VI projection 
+  PT_WAGNER_VII = "Wagner_VII"  ## Wagner_VII projection 
+  PT_QSC = "Quadrilateralized_Spherical_Cube"  ## Quadrilateralized_Spherical_Cube projection 
+  PT_AITOFF = "Aitoff"  ## Aitoff projection 
+  PT_WINKEL_I = "Winkel_I"  ## Winkel_I projection 
+  PT_WINKEL_II = "Winkel_II"  ## Winkel_II projection 
+  PT_WINKEL_TRIPEL = "Winkel_Tripel"  ## Winkel_Tripel projection 
+  PT_CRASTER_PARABOLIC = "Craster_Parabolic"  ## Craster_Parabolic projection 
+  PT_LOXIMUTHAL = "Loximuthal"  ## Loximuthal projection 
+  PT_QUARTIC_AUTHALIC = "Quartic_Authalic"  ## Quartic_Authalic projection 
+  PT_SCH = "Spherical_Cross_Track_Height"  ## Spherical_Cross_Track_Height projection 
+  PP_CENTRAL_MERIDIAN = "central_meridian"  ## central_meridian projection paramete 
+  PP_SCALE_FACTOR = "scale_factor"  ## scale_factor projection paramete 
+  PP_STANDARD_PARALLEL_1 = "standard_parallel_1"  ## standard_parallel_1 projection paramete 
+  PP_STANDARD_PARALLEL_2 = "standard_parallel_2"  ## standard_parallel_2 projection paramete 
+  PP_PSEUDO_STD_PARALLEL_1 = "pseudo_standard_parallel_1"  ## pseudo_standard_parallel_1 projection paramete 
+  PP_LONGITUDE_OF_CENTER = "longitude_of_center"  ## longitude_of_center projection paramete 
+  PP_LATITUDE_OF_CENTER = "latitude_of_center"  ## latitude_of_center projection paramete 
+  PP_LONGITUDE_OF_ORIGIN = "longitude_of_origin"  ## longitude_of_origin projection paramete 
+  PP_LATITUDE_OF_ORIGIN = "latitude_of_origin"  ## latitude_of_origin projection paramete 
+  PP_FALSE_EASTING = "false_easting"  ## false_easting projection paramete 
+  PP_FALSE_NORTHING = "false_northing"  ## false_northing projection paramete 
+  PP_AZIMUTH = "azimuth"  ## azimuth projection paramete 
+  PP_LONGITUDE_OF_POINT_1 = "longitude_of_point_1"  ## longitude_of_point_1 projection paramete 
+  PP_LATITUDE_OF_POINT_1 = "latitude_of_point_1"  ## latitude_of_point_1 projection paramete 
+  PP_LONGITUDE_OF_POINT_2 = "longitude_of_point_2"  ## longitude_of_point_2 projection paramete 
+  PP_LATITUDE_OF_POINT_2 = "latitude_of_point_2"  ## latitude_of_point_2 projection paramete 
+  PP_LONGITUDE_OF_POINT_3 = "longitude_of_point_3"  ## longitude_of_point_3 projection paramete 
+  PP_LATITUDE_OF_POINT_3 = "latitude_of_point_3"  ## latitude_of_point_3 projection paramete 
+  PP_RECTIFIED_GRID_ANGLE = "rectified_grid_angle"  ## rectified_grid_angle projection paramete 
+  PP_LANDSAT_NUMBER = "landsat_number"  ## landsat_number projection paramete 
+  PP_PATH_NUMBER = "path_number"  ## path_number projection paramete 
+  PP_PERSPECTIVE_POINT_HEIGHT = "perspective_point_height"  ## perspective_point_height projection paramete 
+  PP_SATELLITE_HEIGHT = "satellite_height"  ## satellite_height projection paramete 
+  PP_FIPSZONE = "fipszone"  ## fipszone projection paramete 
+  PP_ZONE = "zone"  ## zone projection paramete 
+  PP_LATITUDE_OF_1ST_POINT = "Latitude_Of_1st_Point"  ## Latitude_Of_1st_Point projection parameter 
+  PP_LONGITUDE_OF_1ST_POINT = "Longitude_Of_1st_Point"  ## Longitude_Of_1st_Point projection parameter 
+  PP_LATITUDE_OF_2ND_POINT = "Latitude_Of_2nd_Point"  ## Latitude_Of_2nd_Point projection parameter 
+  PP_LONGITUDE_OF_2ND_POINT = "Longitude_Of_2nd_Point"  ## Longitude_Of_2nd_Point projection parameter 
+  PP_PEG_POINT_LATITUDE = "peg_point_latitude"  ## peg_point_latitude projection paramete 
+  PP_PEG_POINT_LONGITUDE = "peg_point_longitude"  ## peg_point_longitude projection paramete 
+  PP_PEG_POINT_HEADING = "peg_point_heading"  ## peg_point_heading projection paramete 
+  PP_PEG_POINT_HEIGHT = "peg_point_height"  ## peg_point_height projection paramete 
+  UL_METER = "Meter"  ## Linear unit Meter 
+  UL_FOOT = "Foot (International)"  ## or just "FOOT"?, Linear unit Foot (International 
+  UL_FOOT_CONV = "0.3048"  ## Linear unit Foot (International) conversion factor to meter 
+  UL_US_FOOT = "Foot_US"  ## or "US survey foot" from EPSG, Linear unit Foot 
+  UL_US_FOOT_CONV = "0.3048006096012192"  ## Linear unit Foot conversion factor to meter 
+  UL_NAUTICAL_MILE = "Nautical Mile"  ## Linear unit Nautical Mile 
+  UL_NAUTICAL_MILE_CONV = "1852.0"  ## Linear unit Nautical Mile conversion factor to meter 
+  UL_LINK = "Link"  ## Based on US Foot, Linear unit Link 
+  UL_LINK_CONV = "0.20116684023368047"  ## Linear unit Link conversion factor to meter 
+  UL_CHAIN = "Chain"  ## based on US Foot, Linear unit Chain 
+  UL_CHAIN_CONV = "20.116684023368047"  ## Linear unit Chain conversion factor to meter 
+  UL_ROD = "Rod"  ## based on US Foot, Linear unit Rod 
+  UL_ROD_CONV = "5.02921005842012"  ## Linear unit Rod conversion factor to meter 
+  UL_LINK_Clarke = "Link_Clarke"  ## Linear unit Link_Clarke 
+  UL_LINK_Clarke_CONV = "0.2011661949"  ## Linear unit Link_Clarke conversion factor to meter 
+  UL_KILOMETER = "Kilometer"  ## Linear unit Kilometer 
+  UL_KILOMETER_CONV = "1000."  ## Linear unit Kilometer conversion factor to meter 
+  UL_DECIMETER = "Decimeter"  ## Linear unit Decimeter 
+  UL_DECIMETER_CONV = "0.1"  ## Linear unit Decimeter conversion factor to meter 
+  UL_CENTIMETER = "Centimeter"  ## Linear unit Decimeter 
+  UL_CENTIMETER_CONV = "0.01"  ## Linear unit Decimeter conversion factor to meter 
+  UL_MILLIMETER = "Millimeter"  ## Linear unit Millimeter 
+  UL_MILLIMETER_CONV = "0.001"  ## Linear unit Millimeter conversion factor to meter 
+  UL_INTL_NAUT_MILE = "Nautical_Mile_International"  ## Linear unit Nautical_Mile_International 
+  UL_INTL_NAUT_MILE_CONV = "1852.0"  ## Linear unit Nautical_Mile_International conversion factor to meter 
+  UL_INTL_INCH = "Inch_International"  ## Linear unit Inch_International 
+  UL_INTL_INCH_CONV = "0.0254"  ## Linear unit Inch_International conversion factor to meter 
+  UL_INTL_FOOT = "Foot_International"  ## Linear unit Foot_International 
+  UL_INTL_FOOT_CONV = "0.3048"  ## Linear unit Foot_International conversion factor to meter 
+  UL_INTL_YARD = "Yard_International"  ## Linear unit Yard_International 
+  UL_INTL_YARD_CONV = "0.9144"  ## Linear unit Yard_International conversion factor to meter 
+  UL_INTL_STAT_MILE = "Statute_Mile_International"  ## Linear unit Statute_Mile_International 
+  UL_INTL_STAT_MILE_CONV = "1609.344"  ## Linear unit Statute_Mile_Internationalconversion factor to meter 
+  UL_INTL_FATHOM = "Fathom_International"  ## Linear unit Fathom_International 
+  UL_INTL_FATHOM_CONV = "1.8288"  ## Linear unit Fathom_International conversion factor to meter 
+  UL_INTL_CHAIN = "Chain_International"  ## Linear unit Chain_International 
+  UL_INTL_CHAIN_CONV = "20.1168"  ## Linear unit Chain_International conversion factor to meter 
+  UL_INTL_LINK = "Link_International"  ## Linear unit Link_International 
+  UL_INTL_LINK_CONV = "0.201168"  ## Linear unit Link_International conversion factor to meter 
+  UL_US_INCH = "Inch_US_Surveyor"  ## Linear unit Inch_US_Surveyor 
+  UL_US_INCH_CONV = "0.025400050800101603"  ## Linear unit Inch_US_Surveyor conversion factor to meter 
+  UL_US_YARD = "Yard_US_Surveyor"  ## Linear unit Yard_US_Surveyor 
+  UL_US_YARD_CONV = "0.914401828803658"  ## Linear unit Yard_US_Surveyor conversion factor to meter 
+  UL_US_CHAIN = "Chain_US_Surveyor"  ## Linear unit Chain_US_Surveyor 
+  UL_US_CHAIN_CONV = "20.11684023368047"  ## Linear unit Chain_US_Surveyor conversion factor to meter 
+  UL_US_STAT_MILE = "Statute_Mile_US_Surveyor"  ## Linear unit Statute_Mile_US_Surveyor 
+  UL_US_STAT_MILE_CONV = "1609.347218694437"  ## Linear unit Statute_Mile_US_Surveyor conversion factor to meter 
+  UL_INDIAN_YARD = "Yard_Indian"  ## Linear unit Yard_Indian 
+  UL_INDIAN_YARD_CONV = "0.91439523"  ## Linear unit Yard_Indian conversion factor to meter 
+  UL_INDIAN_FOOT = "Foot_Indian"  ## Linear unit Foot_Indian 
+  UL_INDIAN_FOOT_CONV = "0.30479841"  ## Linear unit Foot_Indian conversion factor to meter 
+  UL_INDIAN_CHAIN = "Chain_Indian"  ## Linear unit Chain_Indian 
+  UL_INDIAN_CHAIN_CONV = "20.11669506"  ## Linear unit Chain_Indian conversion factor to meter 
+  UA_DEGREE = "degree"  ## Angular unit degree 
+  UA_DEGREE_CONV = "0.0174532925199433"  ## Angular unit degree conversion factor to radians 
+  UA_RADIAN = "radian"  ## Angular unit radian 
+  PM_GREENWICH = "Greenwich"  ## Prime meridian Greenwich 
+  DN_NAD27 = "North_American_Datum_1927"  ## North_American_Datum_1927 datum name 
+  DN_NAD83 = "North_American_Datum_1983"  ## North_American_Datum_1983 datum name 
+  DN_WGS72 = "WGS_1972"  ## WGS_1972 datum name 
+  DN_WGS84 = "WGS_1984"  ## WGS_1984 datum name 
+  WGS84_SEMIMAJOR = 6378137.0  ## Semi-major axis of the WGS84 ellipsoid 
+  WGS84_INVFLATTENING = 298.257223563  ## Inverse flattening of the WGS84 ellipsoid. 
+  
 proc registerAll*() {.cdecl, dynlib: libgdal, importc: "GDALAllRegister".}
   ## Register all known configured GDAL drivers.
   ## This function will drive any of the following that are configured into GDA:
@@ -274,6 +440,9 @@ proc transform*(hGeom: Geometry, hTransform: CoordinateTransformation): int32 {.
 
 proc transformTo*(hGeom: Geometry, hSRS: SpatialReference): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_TransformTo".}
   ## Transform geometry to new spatial reference system.
+
+proc newSpatialReference(pszWKT: cstring): SpatialReference {.cdecl, dynlib: libgdal, importc: "OSRNewSpatialReference".}
+  ## Constructor
 
 # helper procs
 
