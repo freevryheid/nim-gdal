@@ -441,8 +441,14 @@ proc transform*(hGeom: Geometry, hTransform: CoordinateTransformation): int32 {.
 proc transformTo*(hGeom: Geometry, hSRS: SpatialReference): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_TransformTo".}
   ## Transform geometry to new spatial reference system.
 
-proc newSpatialReference(pszWKT: cstring): SpatialReference {.cdecl, dynlib: libgdal, importc: "OSRNewSpatialReference".}
+proc newSpatialReference*(pszWKT: cstring): SpatialReference {.cdecl, dynlib: libgdal, importc: "OSRNewSpatialReference".}
   ## Constructor
+
+proc getGeometryCount*(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetGeometryCount".}
+  ## Fetch the number of elements in a geometry or number of geometries in container.
+
+proc clone(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Clone".}
+  ## Make a copy of this object.
 
 # helper procs
 
