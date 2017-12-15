@@ -1,3 +1,5 @@
+# TODO: Check if named cstring parameters are in fact ptr cstring
+
 when defined(windows):
   const libgdal = "libgdal.dll"
 elif defined(macosx):
@@ -16,6 +18,9 @@ type
   Geometry* = pointer
   SpatialReference* = pointer
   CoordinateTransformation* = pointer
+  Access* = enum
+    ReadOnly               ## Read only (no update) access
+    Update                 ## Read/write access
   FieldType* = enum
     Integer                ## Simple 32bit integer.
     IntegerList            ## List of 32bit integers.
@@ -105,7 +110,9 @@ type
     GeometryCollection25D  ## 2.5D extension as per 99-402
 
 const
-  OF_VECTOR* = 0x04
+  OF_READONLY* = 0x00  ## Open in read-only mode.
+  OF_UPDATE* = 0x01  ## Open in read/write mode.
+  OF_VECTOR* = 0x04  ## Allow vector drivers to be used.
   WKT_WGS84 = "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]"  ## WGS 84 geodetic (long/lat) WKT / EPSG:4326 with long,lat ordering
   PT_ALBERS_CONIC_EQUAL_AREA = "Albers_Conic_Equal_Area"  ## Albers_Conic_Equal_Area projection
   PT_AZIMUTHAL_EQUIDISTANT = "Azimuthal_Equidistant"  ## Azimuthal_Equidistant projection
@@ -393,7 +400,7 @@ proc getSpatialRef*(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, i
 proc exportToProj4*(hSRS: SpatialReference, ppszReturn: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OSRExportToProj4".}
   ## Export coordinate system in PROJ.4 format.
 
-proc exportToWkt*(hSRS: SpatialReference, ppszReturn: cstring): int32 {.cdecl, dynlib: libgdal, importc: "OSRExportToWkt".}
+proc exportSRToWkt*(hSRS: SpatialReference, ppszReturn: cstringArray): int32 {.cdecl, dynlib: libgdal, importc: "OSRExportToWkt".}
   ## Convert this SRS into WKT format.
 
 proc distance*(hFirst, hOther: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Distance".}
@@ -447,8 +454,14 @@ proc newSpatialReference*(pszWKT: cstring): SpatialReference {.cdecl, dynlib: li
 proc getGeometryCount*(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetGeometryCount".}
   ## Fetch the number of elements in a geometry or number of geometries in container.
 
-proc clone(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Clone".}
+proc clone*(hGeom: Geometry): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_Clone".}
   ## Make a copy of this object.
+
+proc getGeometryName(hGeom: Geometry): cstring {.cdecl, dynlib: libgdal, importc: "OGR_G_GetGeometryName".}
+  ## Fetch WKT name for geometry type.
+
+proc exportToWkt*(hGeom: Geometry, ppszSrcText: pointer): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_ExportToWkt".}
+  ## Convert a geometry into well known text format.
 
 # helper procs
 
@@ -467,6 +480,19 @@ proc getFieldType*(fdefn: FeatureDefn, i: int32): FieldType =
 proc getStringField*(f: Feature, fdefn: FeatureDefn, field: string): cstring =
   var index = fdefn.getFieldIndex(cstring(field))
   return f.getFieldAsString(index)
+
+proc point2d*(x,y: float): Geometry =
+  ## Point constructor
+  result = createGeometry(Point)
+  result.setPoint2D(0, x, y)
+
+proc wkt*(geom: Geometry): string =
+  var
+    dummy: array[1, string]
+    wktA = dummy.allocCStringArray
+  discard exportToWkt(geom, wktA)
+  result = wktA.cstringArrayToSeq()[0]
+  wktA.deallocCStringArray()
 
 proc closestPointonLine*(ln, pt0: Geometry): Geometry =
   # TODO: FixMe
