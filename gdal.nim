@@ -481,10 +481,16 @@ proc getStringField*(f: Feature, fdefn: FeatureDefn, field: string): cstring =
   var index = fdefn.getFieldIndex(cstring(field))
   return f.getFieldAsString(index)
 
-proc point2d*(x,y: float): Geometry =
+proc point2d*(x, y: float): Geometry =
   ## Point constructor
   result = createGeometry(Point)
   result.setPoint2D(0, x, y)
+
+proc pointi2d*(g: Geometry, i: int32): Geometry =
+  ## Point constructor
+  var x, y, z: float
+  g.getPoint(i, x, y, z)
+  result = point2d(x, y)
 
 proc wkt*(geom: Geometry): string =
   var
@@ -494,32 +500,26 @@ proc wkt*(geom: Geometry): string =
   result = wktA.cstringArrayToSeq()[0]
   wktA.deallocCStringArray()
 
-proc closestPointonLine*(ln, pt0: Geometry): Geometry =
-  # TODO: FixMe
-  var
-    x, y, z: float
-    D = 99999.9
-    pt: Geometry
-    d: float
-    n = ln.forceToLineString.getPointCount()
-  echo "n: ", n  
-  for i in 0 .. <n:
-    ln.getPoint(i, x, y, z) 
-    pt = createGeometry(Point)
-    pt.setPoint(0, x, y, z)
-    d = distance(pt0, pt)
-    echo d
-    if d > D:
-      D = d
-      result = pt
-  echo D
-      
-# proc getField(f: Feature, fdefn: FeatureDefn, field: string): auto =
-#   var index = fdefn.getFieldIndex(cstring(field))
-#   case fdefn.getFieldType(index):
-#     of Integer: return f.getFieldAsInteger(index)
-#     of Integer64: return f.getFieldAsInteger64(index)
-#     of Real: return f.getFieldAsDouble(index)
-#     of String: return f.getFieldAsString(index)
-#     else: return f.getFieldAsString(index)
+type
+  GEOSContextHandle = pointer
+  GEOSGeom = pointer
+
+proc initGEOS(): GEOSContextHandle {.cdecl, dynlib: libgdal, importc: "initGEOS_r".}
+
+proc fromWKT(ctx: GEOSContextHandle, wkt: cstring): GEOSGeom {.cdecl, dynlib: libgdal, importc: "GEOSGeomFromWKT_r".}
+
+proc finishGEOS(ctx: GEOSContextHandle) {.cdecl, dynlib: libgdal, importc: "finishGEOS_r".}
+
+proc Project(ctx: GEOSContextHandle, g, p: GEOSGeom): float {.cdecl, dynlib: libgdal, importc: "GEOSProject_r".}
+
+proc project*(g, p: Geometry): float =
+  let
+    ctx = initGEOS()
+    gwkt = g.wkt()
+    pwkt = p.wkt()
+    gg = ctx.fromWKT(gwkt)
+    gp = ctx.fromWKT(pwkt)
+  result = ctx.Project(gg, gp)
+  ctx.finishGEOS()
+
 
