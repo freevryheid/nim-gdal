@@ -377,7 +377,7 @@ proc intersects*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc
   ## Do the features intersect?
 
 proc length*(hGeom: Geometry): float {.cdecl, dynlib: libgdal, importc: "OGR_G_Length".}
-  ## Compute length of a geometry.
+  ## Compute length of a curve geometry.
 
 proc overlaps*(hThis, hOther: Geometry): int {.cdecl, dynlib: libgdal, importc: "OGR_G_Overlaps".}
   ## Test for overlap.
@@ -392,7 +392,7 @@ proc value*(hGeom: Geometry, dfDistance: float): Geometry {.cdecl, dynlib: libgd
   ## Fetch point at given distance along curve.
 
 proc getName*(hLayer: Layer): cstring {.cdecl, dynlib: libgdal, importc: "OGR_L_GetName".}
-  ## Return the layer name
+  ## Return the layer name.
 
 proc getSpatialRef*(hLayer: Layer): SpatialReference {.cdecl, dynlib: libgdal, importc: "OGR_L_GetSpatialRef".}
   ## Fetch the spatial reference system for this layer.
@@ -449,7 +449,7 @@ proc transformTo*(hGeom: Geometry, hSRS: SpatialReference): int32 {.cdecl, dynli
   ## Transform geometry to new spatial reference system.
 
 proc newSpatialReference*(pszWKT: cstring): SpatialReference {.cdecl, dynlib: libgdal, importc: "OSRNewSpatialReference".}
-  ## Constructor
+  ## Constructor.
 
 proc getGeometryCount*(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_GetGeometryCount".}
   ## Fetch the number of elements in a geometry or number of geometries in container.
@@ -462,6 +462,23 @@ proc getGeometryName(hGeom: Geometry): cstring {.cdecl, dynlib: libgdal, importc
 
 proc exportToWkt*(hGeom: Geometry, ppszSrcText: pointer): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_ExportToWkt".}
   ## Convert a geometry into well known text format.
+
+proc getCurveGeometry*(hGeom: Geometry, p: pointer): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_GetCurveGeometry".}
+  ## Return curve version of this geometry. p must be set to nil for now.
+
+proc hasCurveGeometry*(hGeom: Geometry, nonLinear: int32): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_HasCurveGeometry".}
+  ## Returns if this geometry is or has curve geometry.
+
+proc isSimple*(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_IsSimple".}
+  ## Returns TRUE if the geometry is simple.
+
+proc isValid*(hGeom: Geometry): int32 {.cdecl, dynlib: libgdal, importc: "OGR_G_IsValid".}
+  ## Returns TRUE if the geometry is valid.
+
+proc getLinearGeometry*(hGeom: Geometry, deg: float, opts: cstringArray): Geometry {.cdecl, dynlib: libgdal, importc: "OGR_G_GetLinearGeometry".}
+  ## Return, possibly approximate, linear version of this geometry.
+  ## deg is the largest step in degrees along the arc, zero to use the default setting.
+
 
 # helper procs
 
@@ -513,6 +530,9 @@ proc finishGEOS(ctx: GEOSContextHandle) {.cdecl, dynlib: libgdal, importc: "fini
 proc Project(ctx: GEOSContextHandle, g, p: GEOSGeom): float {.cdecl, dynlib: libgdal, importc: "GEOSProject_r".}
 
 proc project*(g, p: Geometry): float =
+  ## project a point p onto a LINESTRING or MULTILINESTRING geometry g.
+  ## EXPERIMENTAL.
+  ## returns distance of point 'p' projected on 'g' from origin of 'g'. Geometry 'g' must be a linear geometry
   let
     ctx = initGEOS()
     gwkt = g.wkt()
